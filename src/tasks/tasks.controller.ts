@@ -13,6 +13,8 @@ import {
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { validateSchema } from '../utils/validateSchema';
+import { createTaskSchema } from '../schemas/createTaskSchema';
 
 @Controller('tasks')
 export class TasksController {
@@ -22,13 +24,18 @@ export class TasksController {
   @HttpCode(201)
   async create(@Body() createTaskDto: CreateTaskDto) {
     try {
-      await this.tasksService.create(createTaskDto);
+      const body = validateSchema<CreateTaskDto>(
+        createTaskDto,
+        createTaskSchema,
+      );
+      await this.tasksService.create(body);
     } catch (err) {
+      if (err.status) throw err;
       throw new HttpException(
         {
           error: err.message,
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
