@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { validateSchema } from 'src/shared/utils/validateSchema';
+import { validateSchema } from '../../shared/utils/validateSchema';
 import { createUserSchema } from './schemas/createUserSchema';
 
 @Controller('users')
@@ -25,6 +25,7 @@ export class UsersController {
       );
       await this.usersService.create(body);
     } catch (err) {
+      console.error('Create User Error:', err);
       throw new HttpException(
         {
           error: err.message,

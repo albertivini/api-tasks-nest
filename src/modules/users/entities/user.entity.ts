@@ -1,4 +1,4 @@
-import { hash } from 'src/shared/utils/password';
+import { hash } from '../../../shared/utils/password';
 
 export class User {
   password: string;
