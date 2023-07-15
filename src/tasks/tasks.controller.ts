@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -8,8 +19,18 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.create(createTaskDto);
+  @HttpCode(201)
+  async create(@Body() createTaskDto: CreateTaskDto) {
+    try {
+      await this.tasksService.create(createTaskDto);
+    } catch (err) {
+      throw new HttpException(
+        {
+          error: err.message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Get()
