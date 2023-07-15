@@ -67,4 +67,30 @@ describe('UsersController', () => {
       expect(err.status).toBe(400);
     }
   });
+
+  it('should login', async () => {
+    sinon.stub(UsersService.prototype, 'login').resolves('token');
+
+    const login = {
+      username: 'username',
+      password: 'password',
+    };
+
+    expect(await controller.login(login)).toStrictEqual({ token: 'token' });
+  });
+
+  it('should not login', async () => {
+    sinon.stub(UsersService.prototype, 'login').throws({ message: 'error' });
+
+    const login = {
+      username: 'username',
+      password: 'password',
+    };
+
+    try {
+      await controller.login(login);
+    } catch (err) {
+      expect(err.status).toBe(400);
+    }
+  });
 });

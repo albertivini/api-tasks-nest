@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { STATUS } from '../../constants/status';
+import { STATUS } from '../../../shared/constants/status';
 
 // yyyy-mm-dd or dd/mm/yyyy
 const dateRegex =

@@ -10,6 +10,9 @@ export class PrismaUsersRepository implements UsersRepository {
   constructor() {
     this.prisma = new PrismaService();
   }
+  findByUsername(username: string): Promise<User> {
+    throw new Error('Method not implemented.');
+  }
 
   async create(payload: User): Promise<void> {
     const { username, email, password } = payload;

@@ -13,7 +13,7 @@ import {
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { validateSchema } from '../utils/validateSchema';
+import { validateSchema } from '../../shared/utils/validateSchema';
 import { createTaskSchema } from './schemas/createTaskSchema';
 
 @Controller('tasks')
