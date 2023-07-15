@@ -30,12 +30,13 @@ export class TasksController {
       );
       await this.tasksService.create(body);
     } catch (err) {
+      console.error('Create Task Error:', err);
       if (err.status) throw err;
       throw new HttpException(
         {
           error: err.message,
         },
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.BAD_REQUEST,
       );
     }
   }

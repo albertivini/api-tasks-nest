@@ -68,7 +68,7 @@ describe('TasksController', () => {
     try {
       await controller.create(createTask as unknown as CreateTaskDto);
     } catch (err) {
-      expect(err.status).toBe(500);
+      expect(err.status).toBe(400);
     }
   });
 });

@@ -1,3 +1,4 @@
+import sinon from 'sinon';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TasksService } from './tasks.service';
 import { TasksRepository } from './interfaces/TasksRepository';
@@ -18,9 +19,13 @@ describe('TasksService', () => {
     }).compile();
 
     service = module.get<TasksService>(TasksService);
+
+    sinon.restore();
   });
 
   it('should be defined', async () => {
+    sinon.stub(PrismaTasksRepository.prototype, 'create').resolves();
+
     const createTask = {
       title: 'task title',
       description: 'task description',
