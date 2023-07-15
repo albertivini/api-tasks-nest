@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  database:
+    image: postgres
+    container_name: database
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=database
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=tasksproject
+    volumes:
+      - pgexams:/data/postgres
+      
+volumes:
+  pgexams:
+    driver: local
