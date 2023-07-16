@@ -9,12 +9,14 @@ import {
   HttpCode,
   HttpException,
   HttpStatus,
+  Req,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { validateSchema } from '../../shared/utils/validateSchema';
 import { createTaskSchema } from './schemas/createTaskSchema';
+import { Request } from 'express';
 
 @Controller('tasks')
 export class TasksController {
@@ -22,16 +24,17 @@ export class TasksController {
 
   @Post()
   @HttpCode(201)
-  async create(@Body() createTaskDto: CreateTaskDto) {
+  async create(@Req() request: Request) {
     try {
+      const { userId } = request;
+
+      const createTaskDto = request.body;
       const body = validateSchema<CreateTaskDto>(
         createTaskDto,
         createTaskSchema,
       );
-      await this.tasksService.create(body);
+      await this.tasksService.create(body, userId);
     } catch (err) {
-      console.error('Create Task Error:', err);
-      if (err.status) throw err;
       throw new HttpException(
         {
           error: err.message,

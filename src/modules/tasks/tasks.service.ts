@@ -8,7 +8,7 @@ import { Task } from './entities/task.entity';
 export class TasksService {
   constructor(private readonly tasksRepository: TasksRepository) {}
 
-  async create(createTaskDto: CreateTaskDto) {
+  async create(createTaskDto: CreateTaskDto, userId: string) {
     const task = new Task(
       createTaskDto.title,
       createTaskDto.description,
@@ -16,7 +16,7 @@ export class TasksService {
       createTaskDto.status,
     );
 
-    await this.tasksRepository.create(task);
+    await this.tasksRepository.create(task, userId);
   }
 
   findAll() {

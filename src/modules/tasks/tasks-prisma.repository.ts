@@ -11,7 +11,7 @@ export class PrismaTasksRepository implements TasksRepository {
     this.prisma = new PrismaService();
   }
 
-  async create(payload: Task): Promise<void> {
+  async create(payload: Task, userId: string): Promise<void> {
     const { description, endDate, status, title } = payload;
 
     await this.prisma.task.create({
@@ -20,6 +20,7 @@ export class PrismaTasksRepository implements TasksRepository {
         endDate,
         status,
         title,
+        userId,
       },
     });
   }

@@ -23,7 +23,7 @@ describe('TasksService', () => {
     sinon.restore();
   });
 
-  it('should be defined', async () => {
+  it('should create a task', async () => {
     sinon.stub(PrismaTasksRepository.prototype, 'create').resolves();
 
     const createTask = {
@@ -33,6 +33,6 @@ describe('TasksService', () => {
       status: 'PENDING',
     };
 
-    expect(await service.create(createTask)).toBeUndefined();
+    expect(await service.create(createTask, 'userId')).toBeUndefined();
   });
 });
