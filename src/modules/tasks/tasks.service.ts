@@ -19,19 +19,36 @@ export class TasksService {
     await this.tasksRepository.create(task, userId);
   }
 
-  findAll() {
-    return `This action returns all tasks`;
+  async findAllByUserId(userId: string) {
+    const tasks = await this.tasksRepository.findAllByUserId(userId);
+
+    return tasks;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  async update(taskId: string, userId: string, updateTaskDto: UpdateTaskDto) {
+    const task = await this.tasksRepository.findTaskById(taskId);
+
+    if (!task) throw new Error('Task does not exists');
+
+    if (task.userId !== userId)
+      throw new Error('This task does not belong to this user');
+
+    const updateTask = new Task(
+      updateTaskDto.title,
+      updateTaskDto.description,
+      updateTaskDto.endDate,
+      updateTaskDto.status,
+    );
+
+    await this.tasksRepository.updateTask(taskId, updateTask);
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
-  }
+  async remove(taskId: string, userId: string) {
+    const task = await this.tasksRepository.findTaskById(taskId);
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+    if (task.userId !== userId)
+      throw new Error('This task does not belong to this user');
+
+    await this.tasksRepository.deleteTask(taskId);
   }
 }

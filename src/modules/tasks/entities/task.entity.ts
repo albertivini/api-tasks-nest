@@ -1,4 +1,6 @@
 export class Task {
+  id: string;
+  userId: string;
   constructor(
     readonly title: string,
     readonly description: string,
