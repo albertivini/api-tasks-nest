@@ -9,10 +9,6 @@ export class User {
     readonly email: string,
     password: string,
   ) {
-    this.hashPassword(password);
-  }
-
-  private hashPassword(password: string) {
     this.password = hash(password);
   }
 }

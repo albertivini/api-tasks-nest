@@ -27,7 +27,6 @@ export class UsersController {
       );
       await this.usersService.create(body);
     } catch (err) {
-      console.error('Create User Error:', err);
       throw new HttpException(
         {
           error: err.message,
@@ -38,19 +37,18 @@ export class UsersController {
   }
 
   @Post('login')
-  @HttpCode(201)
+  @HttpCode(200)
   async login(@Body() loginDto: LoginDto) {
     try {
       const body = validateSchema<LoginDto>(loginDto, loginSchema);
       const token = await this.usersService.login(body);
       return { token };
     } catch (err) {
-      console.error('Login Error:', err);
       throw new HttpException(
         {
           error: err.message,
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.UNAUTHORIZED,
       );
     }
   }

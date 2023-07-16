@@ -90,7 +90,7 @@ describe('UsersController', () => {
     try {
       await controller.login(login);
     } catch (err) {
-      expect(err.status).toBe(400);
+      expect(err.status).toBe(401);
     }
   });
 });

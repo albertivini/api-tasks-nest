@@ -11,6 +11,18 @@ import { sign } from 'jsonwebtoken';
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
   async create(createUserDto: CreateUserDto) {
+    const usernameExists = await this.usersRepository.findByUsername(
+      createUserDto.username,
+    );
+
+    if (usernameExists) throw new Error('Username is already in use');
+
+    const emailExists = await this.usersRepository.findByEmail(
+      createUserDto.email,
+    );
+
+    if (emailExists) throw new Error('Email is already in use');
+
     const user = new User(
       createUserDto.username,
       createUserDto.email,
@@ -28,6 +40,7 @@ export class UsersService {
     const comparePassword = compareHash(loginDto.password, user.password);
 
     if (!comparePassword) throw new Error('Incorrect user or password');
+
     const token = sign(
       {
         email: user.email,

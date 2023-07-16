@@ -10,9 +10,6 @@ export class PrismaUsersRepository implements UsersRepository {
   constructor() {
     this.prisma = new PrismaService();
   }
-  findByUsername(username: string): Promise<User> {
-    throw new Error('Method not implemented.');
-  }
 
   async create(payload: User): Promise<void> {
     const { username, email, password } = payload;
@@ -24,5 +21,25 @@ export class PrismaUsersRepository implements UsersRepository {
         password,
       },
     });
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    const response = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    return response;
+  }
+
+  async findByUsername(username: string): Promise<User> {
+    const response = await this.prisma.user.findUnique({
+      where: {
+        username,
+      },
+    });
+
+    return response;
   }
 }
