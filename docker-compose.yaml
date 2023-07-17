@@ -12,8 +12,8 @@ services:
       - POSTGRES_PASSWORD=docker
       - POSTGRES_DB=tasksproject
     volumes:
-      - pgexams:/data/postgres
+      - pgdb:/data/postgres
       
 volumes:
-  pgexams:
+  pgdb:
     driver: local
