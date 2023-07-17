@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 import { Payload } from './interfaces/Payload';
 import { TOKEN_SECRET } from '../shared/constants/tokenSecret';
+import { ERROR_MESSAGES } from '../shared/constants/errorMessages';
 
 @Injectable()
 export class LoginMiddleware implements NestMiddleware {
@@ -10,7 +11,7 @@ export class LoginMiddleware implements NestMiddleware {
     const authToken = req.headers.authorization;
 
     if (!authToken) {
-      return res.status(401).json({ message: 'Invalid token' });
+      return res.status(401).json({ message: ERROR_MESSAGES.INVALID_TOKEN });
     }
 
     const [, token] = authToken.split(' ');
@@ -22,7 +23,7 @@ export class LoginMiddleware implements NestMiddleware {
 
       return next();
     } catch (err) {
-      return res.status(401).json({ message: 'Invalid token' });
+      return res.status(401).json({ message: ERROR_MESSAGES.INVALID_TOKEN });
     }
   }
 }

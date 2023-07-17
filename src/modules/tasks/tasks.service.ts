@@ -3,6 +3,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TasksRepository } from './interfaces/TasksRepository';
 import { Task } from './entities/task.entity';
+import { ERROR_MESSAGES } from '../../shared/constants/errorMessages';
 
 @Injectable()
 export class TasksService {
@@ -37,10 +38,10 @@ export class TasksService {
   async update(taskId: string, userId: string, updateTaskDto: UpdateTaskDto) {
     const task = await this.tasksRepository.findTaskById(taskId);
 
-    if (!task) throw new Error('Task does not exists');
+    if (!task) throw new Error(ERROR_MESSAGES.TASK_DOES_NOT_EXISTS);
 
     if (task.userId !== userId)
-      throw new Error('This task does not belong to this user');
+      throw new Error(ERROR_MESSAGES.TASK_DOES_NOT_BELONGS_USER);
 
     const updateTask = new Task(
       updateTaskDto.title,
@@ -56,7 +57,7 @@ export class TasksService {
     const task = await this.tasksRepository.findTaskById(taskId);
 
     if (task.userId !== userId)
-      throw new Error('This task does not belong to this user');
+      throw new Error(ERROR_MESSAGES.TASK_DOES_NOT_BELONGS_USER);
 
     await this.tasksRepository.deleteTask(taskId);
   }

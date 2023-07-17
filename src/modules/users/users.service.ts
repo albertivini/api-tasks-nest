@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { sign } from 'jsonwebtoken';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from './interfaces/usersRepository';
 import { User } from './entities/user.entity';
 import { LoginDto } from './dto/login.dto';
 import { compareHash } from '../../shared/utils/password';
 import { TOKEN_SECRET } from '../../shared/constants/tokenSecret';
-import { sign } from 'jsonwebtoken';
+import { ERROR_MESSAGES } from '../../shared/constants/errorMessages';
 
 @Injectable()
 export class UsersService {
@@ -15,13 +16,13 @@ export class UsersService {
       createUserDto.username,
     );
 
-    if (usernameExists) throw new Error('Username is already in use');
+    if (usernameExists) throw new Error(ERROR_MESSAGES.USERNAME_ALREADY_IN_USE);
 
     const emailExists = await this.usersRepository.findByEmail(
       createUserDto.email,
     );
 
-    if (emailExists) throw new Error('Email is already in use');
+    if (emailExists) throw new Error(ERROR_MESSAGES.EMAIL_ALREADY_IN_USE);
 
     const user = new User(
       createUserDto.username,
@@ -35,11 +36,12 @@ export class UsersService {
   async login(loginDto: LoginDto) {
     const user = await this.usersRepository.findByUsername(loginDto.username);
 
-    if (!user) throw new Error('Incorrect user or password');
+    if (!user) throw new Error(ERROR_MESSAGES.INCORRECT_USER_OR_PASSWORD);
 
     const comparePassword = compareHash(loginDto.password, user.password);
 
-    if (!comparePassword) throw new Error('Incorrect user or password');
+    if (!comparePassword)
+      throw new Error(ERROR_MESSAGES.INCORRECT_USER_OR_PASSWORD);
 
     const token = sign(
       {

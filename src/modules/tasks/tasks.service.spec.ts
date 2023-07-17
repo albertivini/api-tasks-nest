@@ -6,6 +6,7 @@ import { PrismaTasksRepository } from './repository/tasks-prisma.repository';
 import { Task } from './entities/task.entity';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { PrismaService } from '../../prisma/prisma.service';
+import { ERROR_MESSAGES } from '../../shared/constants/errorMessages';
 
 const task: Task = {
   id: 'id',
@@ -94,7 +95,7 @@ describe('TasksService', () => {
     try {
       await service.update('taskId', 'userId', updateTask);
     } catch (err) {
-      expect(err.message).toBe('Task does not exists');
+      expect(err.message).toBe(ERROR_MESSAGES.TASK_DOES_NOT_EXISTS);
     }
   });
 
@@ -111,7 +112,7 @@ describe('TasksService', () => {
     try {
       await service.update('taskId', 'wrongUser', updateTask);
     } catch (err) {
-      expect(err.message).toBe('This task does not belong to this user');
+      expect(err.message).toBe(ERROR_MESSAGES.TASK_DOES_NOT_BELONGS_USER);
     }
   });
 
@@ -128,7 +129,7 @@ describe('TasksService', () => {
     try {
       await service.remove('taskId', 'wrongUser');
     } catch (err) {
-      expect(err.message).toBe('This task does not belong to this user');
+      expect(err.message).toBe(ERROR_MESSAGES.TASK_DOES_NOT_BELONGS_USER);
     }
   });
 });

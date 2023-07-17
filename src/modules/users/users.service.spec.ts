@@ -7,6 +7,7 @@ import { PrismaUsersRepository } from './repository/users-prisma.repository';
 import { LoginDto } from './dto/login.dto';
 import * as compareHash from '../../shared/utils/password';
 import { PrismaService } from '../../prisma/prisma.service';
+import { ERROR_MESSAGES } from '../../shared/constants/errorMessages';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -61,7 +62,7 @@ describe('UsersService', () => {
     try {
       await service.create(createUser);
     } catch (err) {
-      expect(err.message).toBe('Username is already in use');
+      expect(err.message).toBe(ERROR_MESSAGES.USERNAME_ALREADY_IN_USE);
     }
   });
 
@@ -84,7 +85,7 @@ describe('UsersService', () => {
     try {
       await service.create(createUser);
     } catch (err) {
-      expect(err.message).toBe('Email is already in use');
+      expect(err.message).toBe(ERROR_MESSAGES.EMAIL_ALREADY_IN_USE);
     }
   });
 
@@ -119,7 +120,7 @@ describe('UsersService', () => {
     try {
       await service.login(loginUser);
     } catch (err) {
-      expect(err.message).toBe('Incorrect user or password');
+      expect(err.message).toBe(ERROR_MESSAGES.INCORRECT_USER_OR_PASSWORD);
     }
   });
 
@@ -140,7 +141,7 @@ describe('UsersService', () => {
     try {
       await service.login(loginUser);
     } catch (err) {
-      expect(err.message).toBe('Incorrect user or password');
+      expect(err.message).toBe(ERROR_MESSAGES.INCORRECT_USER_OR_PASSWORD);
     }
   });
 });
