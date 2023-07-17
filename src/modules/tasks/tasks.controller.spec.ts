@@ -117,12 +117,13 @@ describe('TasksController', () => {
 
     const request = {
       userId: 'userId',
-      query: {
-        status: 'PENDING',
-      },
     } as unknown as Request;
 
-    expect((await controller.findAll(request)).length).toBe(2);
+    const query = {
+      status: 'PENDING',
+    };
+
+    expect((await controller.findAll(request, query.status)).length).toBe(2);
   });
 
   it('should not get all tasks from an user with query param because status query is wrong', async () => {

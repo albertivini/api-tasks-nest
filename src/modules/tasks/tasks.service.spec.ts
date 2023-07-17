@@ -123,6 +123,16 @@ describe('TasksService', () => {
     expect(await service.remove('taskId', 'userId')).toBeUndefined();
   });
 
+  it('should not delete a task from an user because task does not exists', async () => {
+    sinon.stub(PrismaTasksRepository.prototype, 'findTaskById').resolves();
+
+    try {
+      await service.remove('taskId', 'userId');
+    } catch (err) {
+      expect(err.message).toBe(ERROR_MESSAGES.TASK_DOES_NOT_EXISTS);
+    }
+  });
+
   it('should not delete a task from an user because task does not belong to user', async () => {
     sinon.stub(PrismaTasksRepository.prototype, 'findTaskById').resolves(task);
 

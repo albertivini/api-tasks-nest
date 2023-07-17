@@ -78,6 +78,17 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns" : [
+      "src/app.module.ts",
+      "src/main.ts",
+      "src/@types",
+      "src/prisma",
+      "src/modules/tasks/tasks.module.ts",
+      "src/modules/tasks/repository",
+      "src/modules/users/users.module.ts",
+      "src/modules/users/repository",
+      "src/middlewares"
+    ]
   }
 }

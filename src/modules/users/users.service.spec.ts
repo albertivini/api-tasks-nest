@@ -5,7 +5,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from './interfaces/usersRepository';
 import { PrismaUsersRepository } from './repository/users-prisma.repository';
 import { LoginDto } from './dto/login.dto';
-import * as compareHash from '../../shared/utils/password';
 import { PrismaService } from '../../prisma/prisma.service';
 import { ERROR_MESSAGES } from '../../shared/constants/errorMessages';
 
@@ -94,9 +93,8 @@ describe('UsersService', () => {
       id: 'id',
       username: 'username',
       email: 'email@email.com',
-      password: 'password',
+      password: '$2b$10$pYbIWndTuStvpmtifyPM..UCaPLw1iB/.62ZBGIsvGrGdoYQw7a1m',
     });
-    sinon.stub(compareHash, 'compareHash').returns(true);
 
     const loginUser: LoginDto = {
       username: 'username',
@@ -108,9 +106,28 @@ describe('UsersService', () => {
     expect(typeof response).toBe('string');
   });
 
+  it('should not login an user with wrong password', async () => {
+    sinon.stub(PrismaUsersRepository.prototype, 'findByUsername').resolves({
+      id: 'id',
+      username: 'username',
+      email: 'email@email.com',
+      password: '$2b$10$pYbIWndTuStvpmtifyPM..UCaPLw1iB/.62ZBGIsvGrGdoYQw7a1m',
+    });
+
+    const loginUser: LoginDto = {
+      username: 'username',
+      password: 'pass',
+    };
+
+    try {
+      await service.login(loginUser);
+    } catch (err) {
+      expect(err.message).toBe(ERROR_MESSAGES.INCORRECT_USER_OR_PASSWORD);
+    }
+  });
+
   it('should not login an user does not exists', async () => {
     sinon.stub(PrismaUsersRepository.prototype, 'findByUsername').resolves();
-    sinon.stub(compareHash, 'compareHash').returns(true);
 
     const loginUser: LoginDto = {
       username: 'username',
@@ -131,7 +148,6 @@ describe('UsersService', () => {
       email: 'email@email.com',
       password: 'password',
     });
-    sinon.stub(compareHash, 'compareHash').returns(false);
 
     const loginUser: LoginDto = {
       username: 'username',
