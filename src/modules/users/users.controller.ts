@@ -19,8 +19,8 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { ERROR_MESSAGES } from 'src/shared/constants/errorMessages';
-import { SWAGGER_SCHEMA_EXAMPLES } from 'src/shared/constants/swaggerExamples';
+import { ERROR_MESSAGES } from '../../shared/constants/errorMessages';
+import { SWAGGER_SCHEMA_EXAMPLES } from '../../shared/constants/swaggerExamples';
 
 @ApiTags('Users')
 @Controller('users')

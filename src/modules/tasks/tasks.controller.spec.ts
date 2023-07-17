@@ -7,6 +7,7 @@ import { TasksRepository } from './interfaces/TasksRepository';
 import { PrismaTasksRepository } from './repository/tasks-prisma.repository';
 import { Task } from './entities/task.entity';
 import { PrismaService } from '../../prisma/prisma.service';
+import { CreateTaskDto } from './dto/create-task.dto';
 
 const task: Task = {
   id: 'id',
@@ -43,30 +44,32 @@ describe('TasksController', () => {
 
     const request = {
       userId: 'user',
-      body: {
-        title: 'task title',
-        description: 'task description',
-        endDate: '2023-08-23',
-        status: 'PENDING',
-      },
     } as unknown as Request;
 
-    expect(await controller.create(request)).toBeUndefined();
+    const body = {
+      title: 'task title',
+      description: 'task description',
+      endDate: '2023-08-23',
+      status: 'PENDING',
+    };
+
+    expect(await controller.create(request, body)).toBeUndefined();
   });
 
   it('should not be able to create a task', async () => {
     sinon.stub(TasksService.prototype, 'create').resolves();
     const request = {
       userId: 'user',
-      body: {
-        title: 'task title',
-        description: 'task description',
-        status: 'PENDING',
-      },
     } as unknown as Request;
 
+    const body = {
+      title: 'task title',
+      description: 'task description',
+      status: 'PENDING',
+    } as unknown as CreateTaskDto;
+
     try {
-      await controller.create(request);
+      await controller.create(request, body);
     } catch (err) {
       expect(err.status).toBe(400);
     }
@@ -79,16 +82,17 @@ describe('TasksController', () => {
 
     const request = {
       userId: 'user',
-      body: {
-        title: 'task title',
-        description: 'task description',
-        endDate: '2023-08-23',
-        status: 'PENDING',
-      },
     } as unknown as Request;
 
+    const body = {
+      title: 'task title',
+      description: 'task description',
+      endDate: '2023-08-23',
+      status: 'PENDING',
+    };
+
     try {
-      await controller.create(request);
+      await controller.create(request, body);
     } catch (err) {
       expect(err.status).toBe(400);
     }
@@ -161,18 +165,21 @@ describe('TasksController', () => {
 
     const request = {
       userId: 'userId',
-      params: {
-        taskId: 'taskId',
-      },
-      body: {
-        title: 'task title',
-        description: 'task description',
-        endDate: '2023-08-23',
-        status: 'PENDING',
-      },
     } as unknown as Request;
 
-    expect(await controller.update(request)).toBeUndefined();
+    const params = {
+      taskId: 'taskId',
+    };
+    const body = {
+      title: 'task title',
+      description: 'task description',
+      endDate: '2023-08-23',
+      status: 'PENDING',
+    };
+
+    expect(
+      await controller.update(request, body, params.taskId),
+    ).toBeUndefined();
   });
 
   it('should not update a task from an user with service generic error', async () => {
@@ -180,19 +187,21 @@ describe('TasksController', () => {
 
     const request = {
       userId: 'userId',
-      params: {
-        taskId: 'taskId',
-      },
-      body: {
-        title: 'task title',
-        description: 'task description',
-        endDate: '2023-08-23',
-        status: 'PENDING',
-      },
     } as unknown as Request;
 
+    const params = {
+      taskId: 'taskId',
+    };
+
+    const body = {
+      title: 'task title',
+      description: 'task description',
+      endDate: '2023-08-23',
+      status: 'PENDING',
+    };
+
     try {
-      await controller.update(request);
+      await controller.update(request, body, params.taskId);
     } catch (err) {
       expect(err.status).toBe(400);
     }
@@ -203,12 +212,13 @@ describe('TasksController', () => {
 
     const request = {
       userId: 'userId',
-      params: {
-        taskId: 'taskId',
-      },
     } as unknown as Request;
 
-    expect(await controller.remove(request)).toBeUndefined();
+    const params = {
+      taskId: 'taskId',
+    };
+
+    expect(await controller.remove(request, params.taskId)).toBeUndefined();
   });
 
   it('should not delete a task from an user with service generic error', async () => {
@@ -216,13 +226,14 @@ describe('TasksController', () => {
 
     const request = {
       userId: 'userId',
-      params: {
-        taskId: 'taskId',
-      },
     } as unknown as Request;
 
+    const params = {
+      taskId: 'taskId',
+    };
+
     try {
-      await controller.remove(request);
+      await controller.remove(request, params.taskId);
     } catch (err) {
       expect(err.status).toBe(400);
     }

@@ -10,6 +10,7 @@ import {
   Put,
   Body,
   Param,
+  Query,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { TasksService } from './tasks.service';
@@ -28,7 +29,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { SWAGGER_SCHEMA_EXAMPLES } from '../../shared/constants/swaggerExamples';
-import { ERROR_MESSAGES } from 'src/shared/constants/errorMessages';
+import { ERROR_MESSAGES } from '../../shared/constants/errorMessages';
 
 @ApiTags('Tasks')
 @ApiBearerAuth()
@@ -70,13 +71,12 @@ export class TasksController {
     },
   })
   @ApiBadRequestResponse()
-  async findAll(@Req() request: Request) {
+  async findAll(@Req() request: Request, @Query('status') status?: string) {
     try {
       const { userId } = request;
-      const { query } = request;
 
       const validatedQuery = validateSchema<{ status?: string }>(
-        query,
+        { status },
         findAllByUserIdSchema,
       );
 
