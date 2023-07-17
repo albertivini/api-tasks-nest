@@ -1,4 +1,3 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
 import Joi from 'joi';
 
 export function validateSchema<T>(
@@ -7,13 +6,7 @@ export function validateSchema<T>(
 ) {
   const body = schema.validate(bodyToValidate);
 
-  if (body.error)
-    throw new HttpException(
-      {
-        error: body.error.message,
-      },
-      HttpStatus.BAD_REQUEST,
-    );
+  if (body.error) throw new Error(body.error.message);
 
-  return body as T;
+  return body.value as T;
 }

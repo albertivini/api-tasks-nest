@@ -54,14 +54,14 @@ export class PrismaTasksRepository implements TasksRepository {
     const { title, description, endDate, status } = payload;
 
     await this.prisma.task.update({
+      where: {
+        id,
+      },
       data: {
         title: title ? title : undefined,
         description: description ? description : undefined,
         endDate: endDate ? endDate : undefined,
         status: status ? status : undefined,
-      },
-      where: {
-        id,
       },
     });
   }

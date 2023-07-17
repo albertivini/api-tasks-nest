@@ -81,14 +81,14 @@ export class TasksController {
     try {
       const { userId, params, body } = request;
 
-      const { id } = params;
+      const { taskId } = params;
 
       const updateTaskDto = validateSchema<UpdateTaskDto>(
         body,
         updateTaskSchema,
       );
 
-      await this.tasksService.update(id, userId, updateTaskDto);
+      await this.tasksService.update(taskId, userId, updateTaskDto);
     } catch (err) {
       throw new HttpException(
         {
@@ -100,14 +100,14 @@ export class TasksController {
   }
 
   @Delete(':taskId')
-  @HttpCode(204)
+  @HttpCode(200)
   async remove(@Req() request: Request) {
     try {
       const { userId, params } = request;
 
-      const { id } = params;
+      const { taskId } = params;
 
-      await this.tasksService.remove(id, userId);
+      await this.tasksService.remove(taskId, userId);
     } catch (err) {
       throw new HttpException(
         {
