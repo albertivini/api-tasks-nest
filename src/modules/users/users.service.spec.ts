@@ -3,9 +3,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from './interfaces/usersRepository';
-import { PrismaUsersRepository } from './users-prisma.repository';
+import { PrismaUsersRepository } from './repository/users-prisma.repository';
 import { LoginDto } from './dto/login.dto';
 import * as compareHash from '../../shared/utils/password';
+import { PrismaService } from '../../prisma/prisma.service';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -18,6 +19,7 @@ describe('UsersService', () => {
           provide: UsersRepository,
           useClass: PrismaUsersRepository,
         },
+        PrismaService,
       ],
     }).compile();
 

@@ -3,7 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { UsersRepository } from './interfaces/usersRepository';
-import { PrismaUsersRepository } from './users-prisma.repository';
+import { PrismaUsersRepository } from './repository/users-prisma.repository';
+import { PrismaService } from '../../prisma/prisma.service';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -17,6 +18,7 @@ describe('UsersController', () => {
           provide: UsersRepository,
           useClass: PrismaUsersRepository,
         },
+        PrismaService,
       ],
     }).compile();
 

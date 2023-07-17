@@ -4,8 +4,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TasksController } from './tasks.controller';
 import { TasksService } from './tasks.service';
 import { TasksRepository } from './interfaces/TasksRepository';
-import { PrismaTasksRepository } from './tasks-prisma.repository';
+import { PrismaTasksRepository } from './repository/tasks-prisma.repository';
 import { Task } from './entities/task.entity';
+import { PrismaService } from '../../prisma/prisma.service';
 
 const task: Task = {
   id: 'id',
@@ -28,6 +29,7 @@ describe('TasksController', () => {
           provide: TasksRepository,
           useClass: PrismaTasksRepository,
         },
+        PrismaService,
       ],
     }).compile();
 

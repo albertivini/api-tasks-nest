@@ -2,9 +2,10 @@ import sinon from 'sinon';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TasksService } from './tasks.service';
 import { TasksRepository } from './interfaces/TasksRepository';
-import { PrismaTasksRepository } from './tasks-prisma.repository';
+import { PrismaTasksRepository } from './repository/tasks-prisma.repository';
 import { Task } from './entities/task.entity';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { PrismaService } from '../../prisma/prisma.service';
 
 const task: Task = {
   id: 'id',
@@ -26,6 +27,7 @@ describe('TasksService', () => {
           provide: TasksRepository,
           useClass: PrismaTasksRepository,
         },
+        PrismaService,
       ],
     }).compile();
 
