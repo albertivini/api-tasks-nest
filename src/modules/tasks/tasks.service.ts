@@ -56,6 +56,8 @@ export class TasksService {
   async remove(taskId: string, userId: string) {
     const task = await this.tasksRepository.findTaskById(taskId);
 
+    if (!task) throw new Error(ERROR_MESSAGES.TASK_DOES_NOT_EXISTS);
+
     if (task.userId !== userId)
       throw new Error(ERROR_MESSAGES.TASK_DOES_NOT_BELONGS_USER);
 

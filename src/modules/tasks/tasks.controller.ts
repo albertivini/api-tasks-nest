@@ -8,6 +8,8 @@ import {
   HttpStatus,
   Req,
   Put,
+  Body,
+  Param,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { TasksService } from './tasks.service';
@@ -17,18 +19,33 @@ import { createTaskSchema } from './schemas/createTaskSchema';
 import { updateTaskSchema } from './schemas/updateTaskSchema';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { findAllByUserIdSchema } from './schemas/findAllByUserIdSchema';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { SWAGGER_SCHEMA_EXAMPLES } from '../../shared/constants/swaggerExamples';
+import { ERROR_MESSAGES } from 'src/shared/constants/errorMessages';
 
+@ApiTags('Tasks')
+@ApiBearerAuth()
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Post()
   @HttpCode(201)
-  async create(@Req() request: Request) {
+  @ApiCreatedResponse({
+    description: 'Success',
+  })
+  @ApiBadRequestResponse()
+  async create(@Req() request: Request, @Body() createTaskDto: CreateTaskDto) {
     try {
       const { userId } = request;
 
-      const createTaskDto = request.body;
       const body = validateSchema<CreateTaskDto>(
         createTaskDto,
         createTaskSchema,
@@ -46,6 +63,13 @@ export class TasksController {
 
   @Get()
   @HttpCode(200)
+  @ApiOkResponse({
+    description: 'Success',
+    schema: {
+      example: [SWAGGER_SCHEMA_EXAMPLES.postTask],
+    },
+  })
+  @ApiBadRequestResponse()
   async findAll(@Req() request: Request) {
     try {
       const { userId } = request;
@@ -77,18 +101,26 @@ export class TasksController {
 
   @Put(':taskId')
   @HttpCode(204)
-  async update(@Req() request: Request) {
+  @ApiNoContentResponse({
+    description: 'Success',
+  })
+  @ApiBadRequestResponse({
+    description: `${ERROR_MESSAGES.TASK_DOES_NOT_EXISTS} | ${ERROR_MESSAGES.TASK_DOES_NOT_BELONGS_USER}`,
+  })
+  async update(
+    @Req() request: Request,
+    @Body() updateTaskDto: UpdateTaskDto,
+    @Param('taskId') taskId: string,
+  ) {
     try {
-      const { userId, params, body } = request;
+      const { userId } = request;
 
-      const { taskId } = params;
-
-      const updateTaskDto = validateSchema<UpdateTaskDto>(
-        body,
+      const body = validateSchema<UpdateTaskDto>(
+        updateTaskDto,
         updateTaskSchema,
       );
 
-      await this.tasksService.update(taskId, userId, updateTaskDto);
+      await this.tasksService.update(taskId, userId, body);
     } catch (err) {
       throw new HttpException(
         {
@@ -101,11 +133,15 @@ export class TasksController {
 
   @Delete(':taskId')
   @HttpCode(200)
-  async remove(@Req() request: Request) {
+  @ApiOkResponse({
+    description: 'Success',
+  })
+  @ApiBadRequestResponse({
+    description: `${ERROR_MESSAGES.TASK_DOES_NOT_EXISTS} | ${ERROR_MESSAGES.TASK_DOES_NOT_BELONGS_USER}`,
+  })
+  async remove(@Req() request: Request, @Param('taskId') taskId: string) {
     try {
-      const { userId, params } = request;
-
-      const { taskId } = params;
+      const { userId } = request;
 
       await this.tasksService.remove(taskId, userId);
     } catch (err) {
