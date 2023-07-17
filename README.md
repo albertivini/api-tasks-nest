@@ -35,7 +35,8 @@ $ yarn run test:cov
 
 ## Documentation
 
-<a href=http://localhost:3000/api>Local Swagger Documentation</a>
+Development Swagger Documentation route: <b>/api</b>
+
 
 ---
 
