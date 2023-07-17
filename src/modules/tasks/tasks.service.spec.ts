@@ -55,6 +55,14 @@ describe('TasksService', () => {
     expect((await service.findAllByUserId('userId')).length).toBe(2);
   });
 
+  it('should find all tasks from an user with status query param', async () => {
+    sinon
+      .stub(PrismaTasksRepository.prototype, 'findAllByUserIdAndStatus')
+      .resolves([task, task]);
+
+    expect((await service.findAllByUserId('userId', 'PENDING')).length).toBe(2);
+  });
+
   it('should update a task from an user', async () => {
     sinon.stub(PrismaTasksRepository.prototype, 'findTaskById').resolves(task);
     sinon.stub(PrismaTasksRepository.prototype, 'updateTask').resolves();

@@ -10,6 +10,10 @@ export class PrismaTasksRepository implements TasksRepository {
   constructor() {
     this.prisma = new PrismaService();
   }
+
+  findAllByUserIdAndStatus(userId: string, status: any): Promise<Task[]> {
+    throw new Error('Method not implemented.');
+  }
   findTaskById(id: string): Promise<Task> {
     throw new Error('Method not implemented.');
   }

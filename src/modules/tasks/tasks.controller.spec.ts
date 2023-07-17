@@ -104,6 +104,40 @@ describe('TasksController', () => {
     expect((await controller.findAll(request)).length).toBe(2);
   });
 
+  it('should get all tasks from an user with query param', async () => {
+    sinon
+      .stub(TasksService.prototype, 'findAllByUserId')
+      .resolves([task, task]);
+
+    const request = {
+      userId: 'userId',
+      query: {
+        status: 'PENDING',
+      },
+    } as unknown as Request;
+
+    expect((await controller.findAll(request)).length).toBe(2);
+  });
+
+  it('should not get all tasks from an user with query param because status query is wrong', async () => {
+    sinon
+      .stub(TasksService.prototype, 'findAllByUserId')
+      .resolves([task, task]);
+
+    const request = {
+      userId: 'userId',
+      query: {
+        status: 'OTHER',
+      },
+    } as unknown as Request;
+
+    try {
+      await controller.findAll(request);
+    } catch (err) {
+      expect(err.status).toBe(400);
+    }
+  });
+
   it('should not get all tasks from an user with service generic error', async () => {
     sinon
       .stub(TasksService.prototype, 'findAllByUserId')

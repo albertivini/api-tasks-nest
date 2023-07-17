@@ -19,7 +19,16 @@ export class TasksService {
     await this.tasksRepository.create(task, userId);
   }
 
-  async findAllByUserId(userId: string) {
+  async findAllByUserId(userId: string, status?: string) {
+    if (status) {
+      const tasks = await this.tasksRepository.findAllByUserIdAndStatus(
+        userId,
+        status,
+      );
+
+      return tasks;
+    }
+
     const tasks = await this.tasksRepository.findAllByUserId(userId);
 
     return tasks;

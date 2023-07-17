@@ -4,4 +4,4 @@ export const STATUS = {
   DONE: 'DONE',
 } as const;
 
-export const STATUS_ARRAY = [...Object.values(STATUS)];
+export const STATUS_ARRAY = [...Object.values(STATUS)] as const;

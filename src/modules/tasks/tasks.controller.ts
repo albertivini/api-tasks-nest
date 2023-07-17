@@ -16,6 +16,7 @@ import { validateSchema } from '../../shared/utils/validateSchema';
 import { createTaskSchema } from './schemas/createTaskSchema';
 import { updateTaskSchema } from './schemas/updateTaskSchema';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { findAllByUserIdSchema } from './schemas/findAllByUserIdSchema';
 
 @Controller('tasks')
 export class TasksController {
@@ -48,7 +49,21 @@ export class TasksController {
   async findAll(@Req() request: Request) {
     try {
       const { userId } = request;
-      const response = await this.tasksService.findAllByUserId(userId);
+      const { query } = request;
+
+      const validatedQuery = validateSchema<{ status?: string }>(
+        query,
+        findAllByUserIdSchema,
+      );
+
+      const queryStatus = validatedQuery.status
+        ? validatedQuery.status
+        : undefined;
+
+      const response = await this.tasksService.findAllByUserId(
+        userId,
+        queryStatus,
+      );
       return response;
     } catch (err) {
       throw new HttpException(
