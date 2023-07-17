@@ -2,7 +2,7 @@
 
 ## Description
 
-API to manage Tasks made in Node.Js with Nest.Js, Prisma and Postgres. This application have <b>production</b> environment at URL: https://api-tasks-knfg.onrender.com
+API to manage Tasks made in Node.Js with Nest.Js, Prisma and Postgres. This application have <b>production</b> environment at base URL: https://api-tasks-knfg.onrender.com
 
 
 ## Installation
