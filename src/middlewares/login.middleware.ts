@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
-import { Payload } from './interfaces/Payload';
+import { Payload } from './interfaces/payload';
 import { TOKEN_SECRET } from '../shared/constants/tokenSecret';
 import { ERROR_MESSAGES } from '../shared/constants/errorMessages';
 
